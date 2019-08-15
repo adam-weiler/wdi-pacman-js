@@ -78,8 +78,15 @@ function displayMenu() {
     console.log('(p) Eat Power-Pellet');
   }
 
-  ghosts.forEach(function (item) {
-    console.log(`(${item['menu_option']}) Eat ${item['name']} --- ${item['edible']}`); //(1) Eat Blinky
+  ghosts.forEach(function (item) { 
+    if (item['edible']) {
+      currentState = 'edible';
+    } else {
+      currentState = 'inedible';
+    }
+
+    console.log(`(${item['menu_option']}) Eat ${item['name']} (${currentState})`); //(1) Eat Blinky (edible)
+
   })
   console.log('(q) Quit');
 }
