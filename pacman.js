@@ -61,7 +61,15 @@ function displayStats() {
 
 function displayMenu() {
   console.log('\n\nSelect Option:\n');  // each \n creates a new line
+
   console.log('(d) Eat Dot');
+  ghosts.forEach(function (item) {
+    console.log(`(${item['menu_option']}) Eat ${item['name']}`); //(1) Eat Blinky
+  })
+  // console.log('(1) Eat Inky');
+  // console.log('(2) Eat Blinky');
+  // console.log('(3) Eat Pinky');
+  // console.log('(4) Eat Clyde');
   console.log('(q) Quit');
 }
 
