@@ -110,6 +110,8 @@ function eatPowerPellet() {
 function eatGhost(ghost) {
   if (ghost['edible']) {
     console.log(`\nPac-Man ate ${ghost['name']}!`);
+    score += 200;
+    ghost['edible'] = false;
   } else {
     lives -= 1;
     console.log(`\n${ghost['name']} killed Pac-Man!`);
