@@ -44,6 +44,8 @@ const ghosts = [inky, blinky, pinky, clyde];
 // Draw the screen functionality
 function drawScreen() {
   clearScreen();
+  checkLives();
+
   setTimeout(() => {
     displayStats();
     displayMenu();
@@ -53,6 +55,12 @@ function drawScreen() {
 
 function clearScreen() {
   console.log('\x1Bc');
+}
+
+function checkLives() {
+  if (lives < 0) {
+    process.exit();
+  }
 }
 
 function displayStats() {
@@ -82,8 +90,6 @@ function eatDot() {
 }
 
 function eatGhost(ghost) {
-  console.log(ghost)
-
   ghost['edible'] ?
     console.log(`\nPac-Man ate ${ghost['name']}!`) :
     lives = lives - 1
