@@ -73,7 +73,11 @@ function displayMenu() {
   console.log('\n\nSelect Option:\n');  // each \n creates a new line
 
   console.log('(d) Eat Dot');
-  console.log('(p) Eat Power-Pellet');
+
+  if (powerPellets > 0) { //Pac-Man can only eat pellets if has some left.
+    console.log('(p) Eat Power-Pellet');
+  }
+
   ghosts.forEach(function (item) {
     console.log(`(${item['menu_option']}) Eat ${item['name']} --- ${item['edible']}`); //(1) Eat Blinky
   })
@@ -123,9 +127,15 @@ function processInput(key) {
     case 'd':
       eatDot();
       break;
+
+
     case 'p':
-        eatPowerPellet();
+        powerPellets > 0 
+        ? eatPowerPellet()
+        : console.log('\nNo Power-Pellets left!')
         break;
+
+
     case '1':
       eatGhost(ghosts[0])
       break;
