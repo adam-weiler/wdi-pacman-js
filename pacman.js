@@ -4,7 +4,6 @@ let lives = 2;
 
 
 // Define your ghosts here
-
 const inky = {
   menu_option: '1',
   name: 'Inky',
@@ -37,7 +36,9 @@ const clyde = {
   edible: false
 }
 
-// replace this comment with your four ghosts setup as objects
+const ghosts = [inky, blinky, pinky, clyde];
+
+
 
 
 // Draw the screen functionality
