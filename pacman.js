@@ -66,10 +66,6 @@ function displayMenu() {
   ghosts.forEach(function (item) {
     console.log(`(${item['menu_option']}) Eat ${item['name']}`); //(1) Eat Blinky
   })
-  // console.log('(1) Eat Inky');
-  // console.log('(2) Eat Blinky');
-  // console.log('(3) Eat Pinky');
-  // console.log('(4) Eat Clyde');
   console.log('(q) Quit');
 }
 
@@ -85,6 +81,15 @@ function eatDot() {
   score += 10;
 }
 
+function eatGhost(ghost) {
+  console.log(ghost)
+
+  ghost['edible'] ?
+    console.log(`\nPac-Man ate ${ghost['name']}!`) :
+    lives = lives - 1
+    console.log(`\n${ghost['name']} killed Pac-Man!`)
+}
+
 
 // Process Player's Input
 function processInput(key) {
@@ -96,6 +101,18 @@ function processInput(key) {
     case 'd':
       eatDot();
       break;
+    case '1':
+      eatGhost(ghosts[0])
+      break;
+    case '2':
+        eatGhost(ghosts[1])
+        break;
+    case '3':
+        eatGhost(ghosts[2])
+        break;
+    case '4':
+        eatGhost(ghosts[3])
+        break;
     default:
       console.log('\nInvalid Command!');
   }
