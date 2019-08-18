@@ -1,10 +1,3 @@
-// Setup initial game stats
-let score = 0;
-let lives = 2;
-let powerPellets = 4;
-let dots = 240;
-
-
 // Define your ghosts here
 const inky = {
   menu_option: '1',
@@ -42,6 +35,60 @@ const ghosts = [inky, blinky, pinky, clyde];
 
 
 
+const cherry = {
+  name: 'Cherry',
+  points: 100
+}
+
+const strawberry = {
+  name: 'Strawberry',
+  points: 300
+}
+
+const orange = {
+  name: 'Orange',
+  points: 500
+}
+
+const apple = {
+  name: 'Apple',
+  points: 700
+}
+
+const pineapple = {
+  name: 'Pineapple',
+  points: 1000
+}
+
+const galaxianSpaceship = {
+  name: 'Galaxian Spaceship',
+  points: 2000
+}
+
+const bell = {
+  name: 'Bell',
+  points: 3000
+}
+
+const key = {
+  name: 'Key',
+  points: 5000
+}
+
+const fruits = [cherry, strawberry, orange, apple, pineapple, galaxianSpaceship, bell, key];
+
+
+
+// Setup initial game stats
+let level = 1;
+let score = 0;
+let lives = 2;
+let powerPellets = 4;
+let dots = 240;
+let fruitBonus = false;
+let currentFruit = fruits[0];
+
+
 
 // Draw the screen functionality
 function drawScreen() {
@@ -66,13 +113,18 @@ function checkLives() {
 }
 
 function displayStats() {
+  console.log(`Level: ${level}`);
   console.log(`Score: ${score}     Lives: ${lives}\n`);
   console.log(`Power-Pellets: ${powerPellets}`);
   console.log(`Dots: ${dots}`);
 }
 
 function displayMenu() {
-  console.log('\n\nSelect Option:\n');  // each \n creates a new line
+  console.log('\n\nSelect Option:\n');
+
+  if (fruitBonus) {
+    console.log(`(f) Eat ${currentFruit.name}`);
+  }
 
   if (dots >= 1) { //Shows option to eat dots if Pac-Man has at least 1.
     console.log('(d) Eat Dot');
@@ -92,14 +144,14 @@ function displayMenu() {
     console.log('(p) Eat Power-Pellet');
   }
 
-  ghosts.forEach(function (item) { 
-    if (item['edible']) {
+  ghosts.forEach(function (ghost) { 
+    if (ghost['edible']) {
       currentState = 'edible';
     } else {
       currentState = 'inedible';
     }
 
-    console.log(`(${item['menu_option']}) Eat ${item['name']} (${currentState})`); //(1) Eat Blinky (edible)
+    console.log(`(${ghost['menu_option']}) Eat ${ghost['name']} (${currentState})`); //(1) Eat Blinky (edible)
 
   })
   console.log('(q) Quit');
@@ -112,32 +164,97 @@ function displayPrompt() {
 
 
 // Menu Options
+function eatFruit() {
+  console.log(`\nYou ate a ${currentFruit.name}!`);
+  score += currentFruit.points;
+}
+
+
+
+
 function eatDot(numToEat) {
-  console.log('\nChomp!');
   dots -= numToEat;
   score += 10 * numToEat;
+  console.log('\nChomp!');
+  checkLevel(); //Checks if Pac-Man gains a level.
 }
+
 
 function eatPowerPellet() {
   score += 50;
 
-  ghosts.forEach(function (item) {
-    item['edible'] = true;
+  ghosts.forEach(function (ghost) {
+    ghost['edible'] = true;
   })
 
   powerPellets -= 1
   console.log('\nEating a Power-Pellet!');
+  checkLevel(); //Checks if Pac-Man gains a level.
 }
 
+
 function eatGhost(ghost) {
-  if (ghost['edible']) {
+  if (ghost['edible']) {  //If selected ghost is edible, Pac-Man eats ghost.
     console.log(`\nPac-Man ate ${ghost['name']}!`);
     score += 200;
     ghost['edible'] = false;
-  } else {
+  } else {  //Else selected ghost is not edible, Pac-Man loses a life.
     lives -= 1;
     console.log(`\n${ghost['name']} killed Pac-Man!`);
   }
+}
+
+
+function checkLevel() {
+  if ((powerPellets == 0) && (dots == 0)) {
+    level += 1;
+
+    if (level == 2) { // Is there a cleaner way to write this?
+      currentFruit = fruits[1];
+    } else if (level == 3) {
+      currentFruit = fruits[2];
+    } else if (level == 5) {
+      currentFruit = fruits[3];
+    } else if (level == 7) {
+      currentFruit = fruits[4];
+    } else if (level == 9) {
+      currentFruit = fruits[5];
+    } else if (level == 11) {
+      currentFruit = fruits[6];
+    } else if (level == 13) {
+      currentFruit = fruits[7];
+    }
+
+    // powerPellets = 4;
+    // dots = 240;
+    resetLevel();
+    console.log('\nLevel Up!')
+
+    // console.log(`Level: ${level}`);
+    // console.log(`PowerPellets: ${powerPellets}`);
+    // console.log(`Dots: ${dots}`);
+  }
+
+  if (level == 10) { //Change this to 256 later
+    level = 1;
+    score = 0;
+    lives = 2;
+    currentFruit = fruits[0];
+    resetLevel();
+    console.log('\n\nYou beat the game!\n');
+  }
+}
+
+
+function resetLevel() {
+  powerPellets = 4;
+  dots = 240;
+
+  ghosts.forEach((element) => {
+    element['edible'] = false;
+    console.log(`Edible: ${element['edible']}`);
+  })
+
 }
 
 
@@ -148,30 +265,40 @@ function processInput(key) {
     case 'q':
       process.exit();
       break;
+    
+    
+
+    case 'f':
+      fruitBonus  
+      ? eatFruit()  // If fruitBonus is true, trigger eatFruit().
+      : console.log('\nNo Fruit on screen!')  // Else return message.
+      break;
+
+
     case 'd':
       dots >= 1 
-      ? eatDot(1)
-      : console.log('\nNo Dots left!')
+      ? eatDot(1)  // If dots >= 1, trigger eatDot().  Eats 1 dot.
+      : console.log('\nNo Dots left!')  // Else return message.
       break;
     case 't':
       dots >= 10 
-      ? eatDot(10)
-      : console.log('\nNot enough Dots left!')
+      ? eatDot(10)  // If dots >= 10, trigger eatDot().  Eats 10 dots.
+      : console.log('\nNot enough Dots left!')  // Else return message.
       break;
     case 'o':
       dots >= 100 
-      ? eatDot(100)
-      : console.log('\nNot enough Dots left!')
+      ? eatDot(100)  // If dots >= 100, trigger eatDot().  Eats 100 dots.
+      : console.log('\nNot enough Dots left!')  // Else return message.
       break;
     case 'a':
       dots >= 1 
-      ? eatDot(dots)
-      : console.log('\nNo Dots left!')
+      ? eatDot(dots)  // If dots >= 1, trigger eatDot(). Eats all dots.
+      : console.log('\nNo Dots left!')  // Else return message.
       break;
     case 'p':
       powerPellets >= 1 
-      ? eatPowerPellet()
-      : console.log('\nNo Power-Pellets left!')
+      ? eatPowerPellet()  // If powerPellets >= 1, trigger eatPowerPellet().
+      : console.log('\nNo Power-Pellets left!')  // Else return message.
       break;
     case '1':
       eatGhost(ghosts[0])
@@ -185,6 +312,13 @@ function processInput(key) {
     case '4':
       eatGhost(ghosts[3])
       break;
+
+
+    case 'r':  //Cheat code; remove this later.
+      checkLevel();
+      break;
+
+
     default:
       console.log('\nInvalid Command!');
   }
