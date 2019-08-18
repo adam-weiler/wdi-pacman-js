@@ -2,6 +2,7 @@
 let score = 0;
 let lives = 2;
 let powerPellets = 4;
+let dots = 240;
 
 
 // Define your ghosts here
@@ -67,14 +68,27 @@ function checkLives() {
 function displayStats() {
   console.log(`Score: ${score}     Lives: ${lives}\n`);
   console.log(`Power-Pellets: ${powerPellets}`);
+  console.log(`Dots: ${dots}`);
 }
 
 function displayMenu() {
   console.log('\n\nSelect Option:\n');  // each \n creates a new line
 
-  console.log('(d) Eat Dot');
+  if (dots >= 1) { //Shows option to eat dots if Pac-Man has at least 1.
+    console.log('(d) Eat Dot');
+  
+    if (dots >= 10) { //Shows option to eat 10 dots if Pac-Man has at least 10.
+      console.log('(t) Eat 10 Dots');
+    }
 
-  if (powerPellets > 0) { //Pac-Man can only eat pellets if has some left.
+    if (dots >= 100) { //Shows option to eat 100 dots if Pac-Man has at least 100.
+      console.log('(o) Eat 100 Dots');
+    }
+
+    console.log('(a) Eat all remaining Dots');
+  }
+
+  if (powerPellets >= 1) { //Pac-Man can only eat pellets if has at least 1 left.
     console.log('(p) Eat Power-Pellet');
   }
 
@@ -98,9 +112,10 @@ function displayPrompt() {
 
 
 // Menu Options
-function eatDot() {
+function eatDot(numToEat) {
   console.log('\nChomp!');
-  score += 10;
+  dots -= numToEat;
+  score += 10 * numToEat;
 }
 
 function eatPowerPellet() {
@@ -134,29 +149,42 @@ function processInput(key) {
       process.exit();
       break;
     case 'd':
-      eatDot();
+      dots >= 1 
+      ? eatDot(1)
+      : console.log('\nNo Dots left!')
       break;
-
-
+    case 't':
+      dots >= 10 
+      ? eatDot(10)
+      : console.log('\nNot enough Dots left!')
+      break;
+    case 'o':
+      dots >= 100 
+      ? eatDot(100)
+      : console.log('\nNot enough Dots left!')
+      break;
+    case 'a':
+      dots >= 1 
+      ? eatDot(dots)
+      : console.log('\nNo Dots left!')
+      break;
     case 'p':
-        powerPellets > 0 
-        ? eatPowerPellet()
-        : console.log('\nNo Power-Pellets left!')
-        break;
-
-
+      powerPellets >= 1 
+      ? eatPowerPellet()
+      : console.log('\nNo Power-Pellets left!')
+      break;
     case '1':
       eatGhost(ghosts[0])
       break;
     case '2':
-        eatGhost(ghosts[1])
-        break;
+      eatGhost(ghosts[1])
+      break;
     case '3':
-        eatGhost(ghosts[2])
-        break;
+      eatGhost(ghosts[2])
+      break;
     case '4':
-        eatGhost(ghosts[3])
-        break;
+      eatGhost(ghosts[3])
+      break;
     default:
       console.log('\nInvalid Command!');
   }
