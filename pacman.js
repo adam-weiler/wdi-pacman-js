@@ -164,17 +164,35 @@ function displayPrompt() {
 
 
 // Menu Options
-function eatFruit() {
-  console.log(`\nYou ate a ${currentFruit.name}!`);
+function eatFruit() {  // Pac-Man eats a Fruit.
   score += currentFruit.points;
+  fruitBonus = false;
+  console.log(`\nYou ate a ${currentFruit.name}!`);
 }
 
 
-
-
-function eatDot(numToEat) {
+function eatDot(numToEat) {  //Pac-Man eats a Dot. Chance to trigger a fruitBonus.
   dots -= numToEat;
   score += 10 * numToEat;
+
+  // if (dots < 170) {  // More realistic fruit drops. 
+  //   chanceOfFruit = Math.floor((Math.random() * 240 - 70 - dots) + 1);
+  //   console.log(chanceOfFruit)
+  // }
+
+  chanceOfFruit = Math.floor((Math.random() * -25) + 12.5);  //More fun fruit drops.
+  // console.log(chanceOfFruit)
+
+  if (chanceOfFruit > 0) {
+    fruitBonus = true;
+  } else {
+    fruitBonus = false;
+  }
+
+  chanceOfFruit > 0  
+  ? fruitBonus = true  // If chanceOfFruit is higher than 0, fruitBonus enabled.
+  : fruitBonus = false  // Else fruitBonus is disabled.
+
   console.log('\nChomp!');
   checkLevel(); //Checks if Pac-Man gains a level.
 }
@@ -249,6 +267,7 @@ function checkLevel() {
 function resetLevel() {
   powerPellets = 4;
   dots = 240;
+  fruitBonus = false;
 
   ghosts.forEach((element) => {
     element['edible'] = false;
