@@ -85,6 +85,7 @@ let score = 0;
 let lives = 2;
 let powerPellets = 4;
 let dots = 240;
+let ghostsEaten = 0;
 let fruitBonus = false;
 let currentFruit = fruits[0];
 
@@ -117,6 +118,7 @@ function displayStats() {
   console.log(`Score: ${score}     Lives: ${lives}\n`);
   console.log(`Power-Pellets: ${powerPellets}`);
   console.log(`Dots: ${dots}`);
+  console.log(`ghost eaten: ${ghostsEaten}`);
 }
 
 function displayMenu() {
@@ -213,9 +215,21 @@ function eatPowerPellet() {
 
 function eatGhost(ghost) {
   if (ghost['edible']) {  //If selected ghost is edible, Pac-Man eats ghost.
-    console.log(`\nPac-Man ate ${ghost['name']}!`);
-    score += 200;
+    // score += (200 * (2 ^ (ghostsEaten % 4))); //This doesn't work. Do this part first.
+    
+    if (ghostsEaten % 4 == 0) {  // Each ghost eaten increases in points scored. Do this part first.
+      score += 200;
+    } else if (ghostsEaten % 4 == 1) {
+      score += 400;
+    } else if (ghostsEaten % 4 == 2) {
+      score += 800;
+    } else if (ghostsEaten % 4 == 3) {
+      score += 1600;
+    }
+    
+    ghostsEaten += 1; //Do this second.
     ghost['edible'] = false;
+    console.log(`\nPac-Man ate ${ghost['name']}!`);
   } else {  //Else selected ghost is not edible, Pac-Man loses a life.
     lives -= 1;
     console.log(`\n${ghost['name']} killed Pac-Man!`);
@@ -267,6 +281,7 @@ function checkLevel() {
 function resetLevel() {
   powerPellets = 4;
   dots = 240;
+  ghostsEaten = 0;
   fruitBonus = false;
 
   ghosts.forEach((element) => {
