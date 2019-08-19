@@ -79,14 +79,11 @@ const key = {
 const fruits = [cherry, strawberry, orange, apple, pineapple, galaxianSpaceship, bell, key];
 
 
-
 // Getting HighScore from text file.
 
 // const fr = new FileReader();
 // var fs = require("fs");
 // fr.onload = 
-
-
 
 
 // let highScore;
@@ -123,6 +120,7 @@ let powerPellets = 4;
 let dots = 240;
 let ghostsEaten = 0;
 let fruitBonus = false;
+let pelletPower = false;
 let currentFruit = fruits[0];
 
 
@@ -151,15 +149,14 @@ function checkLives() {
 
 function displayStats() {
   if (highScore) {  // Displays a high score if there is one.
-    console.log('HIGH SCORE');
-    console.log(`${highScore} - ${highScorer}\n`);
+    console.log('HIGH SCORE\t\tSCORE');
+    console.log(`${highScore} - ${highScorer}\t\t${score}\n`);
   }
 
-  console.log(`Level: ${level}`);
-  console.log(`Score: ${score}     Lives: ${lives}\n`);
+  console.log(`Level: ${level}\t\tLives: ${lives}\n`);
   console.log(`Power-Pellets: ${powerPellets} ⚈`);
   console.log(`Dots: ${dots} ·`);
-  console.log(`ghost eaten: ${ghostsEaten}`);
+  // console.log(`ghost eaten: ${ghostsEaten}`);
 }
 
 function displayMenu() {
@@ -180,10 +177,10 @@ function displayMenu() {
       console.log('(o) Eat 100 Dots ····');
     }
 
-    console.log('(a) Eat all remaining Dots ·····');
+    console.log('(a) Eat all Dots ·····');
   }
 
-  if (powerPellets >= 1) { //Pac-Man can only eat pellets if has at least 1 left.
+  if (powerPellets >= 1 && pelletPower == false) { //Pac-Man can only eat pellets if has at least 1 left.
     console.log('(p) Eat Power-Pellet ⚈');
   }
 
@@ -197,7 +194,7 @@ function displayMenu() {
     console.log(`(${ghost['menu_option']}) Eat ${ghost['name']} ${currentState}`); //(1) Eat Blinky (edible)
 
   })
-  console.log('(q) Quit');
+  console.log('(q) Quit\n');
   console.log('👻 🔑 🔔 👾 🍍 🍎 🧡 🍓 🍒 ·⚈');
 }
 
@@ -243,15 +240,21 @@ function eatDot(numToEat) {  //Pac-Man eats a Dot. Chance to trigger a fruitBonu
 
 
 function eatPowerPellet() {
-  score += 50;
+  if (pelletPower == false) {
+    score += 50;
 
-  ghosts.forEach(function (ghost) {
-    ghost['edible'] = true;
-  })
+    ghosts.forEach(function (ghost) {
+      ghost['edible'] = true;
+    })
 
-  powerPellets -= 1
-  console.log('\nEating a Power-Pellet!');
-  checkLevel(); //Checks if Pac-Man gains a level.
+    powerPellets -= 1
+    pelletPower = true;
+    console.log('\nEating a Power-Pellet!');
+    checkLevel(); //Checks if Pac-Man gains a level.
+  } else {
+    console.log('\nEat the ghosts first!');
+  }
+  
 }
 
 
@@ -267,6 +270,7 @@ function eatGhost(ghost) {
       score += 800;
     } else if (ghostsEaten % 4 == 3) {
       score += 1600;
+      pelletPower = false;
     }
     
     ghostsEaten += 1; //Do this second.
@@ -325,6 +329,7 @@ function resetLevel() {
   dots = 240;
   ghostsEaten = 0;
   fruitBonus = false;
+  pelletPower = false;
 
   ghosts.forEach((element) => {
     element['edible'] = false;
