@@ -36,47 +36,83 @@ const ghosts = [inky, blinky, pinky, clyde];
 
 
 const cherry = {
-  name: 'Cherry',
+  name: 'Cherry 🍒',
   points: 100
 }
 
 const strawberry = {
-  name: 'Strawberry',
+  name: 'Strawberry 🍓',
   points: 300
 }
 
 const orange = {
-  name: 'Orange',
+  name: 'Orange 🧡',
   points: 500
 }
 
 const apple = {
-  name: 'Apple',
+  name: 'Apple 🍎',
   points: 700
 }
 
 const pineapple = {
-  name: 'Pineapple',
+  name: 'Pineapple 🍍',
   points: 1000
 }
 
 const galaxianSpaceship = {
-  name: 'Galaxian Spaceship',
+  name: 'Galaxian Spaceship 👾',
   points: 2000
 }
 
 const bell = {
-  name: 'Bell',
+  name: 'Bell 🔔',
   points: 3000
 }
 
 const key = {
-  name: 'Key',
+  name: 'Key 🔑',
+  // name: 'Key 🗝',
   points: 5000
 }
 
 const fruits = [cherry, strawberry, orange, apple, pineapple, galaxianSpaceship, bell, key];
 
+
+
+// Getting HighScore from text file.
+
+// const fr = new FileReader();
+// var fs = require("fs");
+// fr.onload = 
+
+
+
+
+// let highScore;
+
+// const file = 'highScore.txt';
+// const reader = new FileReader();
+
+// reader.onload = function(e) {
+//   highScore = reader.result;
+// }
+
+// reader.readAsText(file);
+
+
+// rawFile.open("GET", file, false);
+// rawFile.onreadystatechange
+
+// Getting HighScore from text file.
+const fs = require('fs');
+const textByLine = fs.readFileSync('highScore.txt').toString().split('\n');
+let highScore = textByLine[0];
+let highScorer = textByLine[1];
+
+
+
+// let highScore = '';
 
 
 // Setup initial game stats
@@ -114,10 +150,15 @@ function checkLives() {
 }
 
 function displayStats() {
+  if (highScore) {  // Displays a high score if there is one.
+    console.log('HIGH SCORE');
+    console.log(`${highScore} - ${highScorer}\n`);
+  }
+
   console.log(`Level: ${level}`);
   console.log(`Score: ${score}     Lives: ${lives}\n`);
-  console.log(`Power-Pellets: ${powerPellets}`);
-  console.log(`Dots: ${dots}`);
+  console.log(`Power-Pellets: ${powerPellets} ⚈`);
+  console.log(`Dots: ${dots} ·`);
   console.log(`ghost eaten: ${ghostsEaten}`);
 }
 
@@ -129,39 +170,40 @@ function displayMenu() {
   }
 
   if (dots >= 1) { //Shows option to eat dots if Pac-Man has at least 1.
-    console.log('(d) Eat Dot');
+    console.log('(d) Eat Dot ·');
   
     if (dots >= 10) { //Shows option to eat 10 dots if Pac-Man has at least 10.
-      console.log('(t) Eat 10 Dots');
+      console.log('(t) Eat 10 Dots ···');
     }
 
     if (dots >= 100) { //Shows option to eat 100 dots if Pac-Man has at least 100.
-      console.log('(o) Eat 100 Dots');
+      console.log('(o) Eat 100 Dots ····');
     }
 
-    console.log('(a) Eat all remaining Dots');
+    console.log('(a) Eat all remaining Dots ·····');
   }
 
   if (powerPellets >= 1) { //Pac-Man can only eat pellets if has at least 1 left.
-    console.log('(p) Eat Power-Pellet');
+    console.log('(p) Eat Power-Pellet ⚈');
   }
 
   ghosts.forEach(function (ghost) { 
     if (ghost['edible']) {
-      currentState = 'edible';
+      currentState = '(edible) 🌚';
     } else {
-      currentState = 'inedible';
+      currentState = '(inedible) 👻';
     }
 
-    console.log(`(${ghost['menu_option']}) Eat ${ghost['name']} (${currentState})`); //(1) Eat Blinky (edible)
+    console.log(`(${ghost['menu_option']}) Eat ${ghost['name']} ${currentState}`); //(1) Eat Blinky (edible)
 
   })
   console.log('(q) Quit');
+  console.log('👻 🔑 🔔 👾 🍍 🍎 🧡 🍓 🍒 ·⚈');
 }
 
 function displayPrompt() {
   // process.stdout.write is similar to console.log except it doesn't add a new line after the text
-  process.stdout.write('\nWaka Waka :v '); // :v is the Pac-Man emoji.
+  process.stdout.write('\nWaka Waka 🙂\n'); // :v is the Pac-Man emoji.
 }
 
 
